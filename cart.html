@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Luxury Cart</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+padding:25px;
+color:white;
+overflow-x:hidden;
+background:
+radial-gradient(circle at 15% 20%,rgba(255,255,255,.18),transparent 18%),
+radial-gradient(circle at 85% 15%,rgba(255,255,255,.12),transparent 18%),
+radial-gradient(circle at 25% 80%,rgba(255,0,128,.18),transparent 20%),
+radial-gradient(circle at 75% 75%,rgba(0,255,255,.16),transparent 20%),
+linear-gradient(-45deg,#0f0c29,#302b63,#24243e,#6a11cb,#2575fc,#ff0080);
+background-size:400% 400%;
+animation:luxurybg 16s ease infinite;
+position:relative;
+}
+
+body::before{
+content:"";
+position:fixed;
+top:-10%;
+left:-10%;
+width:320px;
+height:320px;
+border-radius:50%;
+background:rgba(255,255,255,.10);
+filter:blur(45px);
+animation:floatone 9s ease-in-out infinite;
+pointer-events:none;
+}
+
+body::after{
+content:"";
+position:fixed;
+bottom:-10%;
+right:-10%;
+width:360px;
+height:360px;
+border-radius:50%;
+background:rgba(255,255,255,.08);
+filter:blur(55px);
+animation:floattwo 11s ease-in-out infinite;
+pointer-events:none;
+}
+
+@keyframes luxurybg{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+@keyframes floatone{
+0%,100%{transform:translate(0,0);}
+50%{transform:translate(60px,40px);}
+}
+
+@keyframes floattwo{
+0%,100%{transform:translate(0,0);}
+50%{transform:translate(-70px,-50px);}
+}
+
+.wrapper{
+max-width:1300px;
+margin:auto;
+display:grid;
+grid-template-columns:1fr 380px;
+gap:24px;
+position:relative;
+z-index:2;
+}
+
+.card{
+background:rgba(255,255,255,.16);
+backdrop-filter:blur(18px);
+border-radius:24px;
+padding:24px;
+box-shadow:0 18px 40px rgba(0,0,0,.18);
+}
+
+.title{
+font-size:36px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.sub{
+opacity:.9;
+margin-bottom:22px;
+}
+
+#cartItems{
+display:flex;
+flex-direction:column;
+gap:16px;
+}
+
+.item{
+display:grid;
+grid-template-columns:110px 1fr auto;
+gap:16px;
+align-items:center;
+padding:14px;
+border-radius:18px;
+background:rgba(255,255,255,.10);
+}
+
+.cart-img{
+width:110px;
+height:95px;
+object-fit:cover;
+border-radius:14px;
+}
+
+.details h3{
+font-size:20px;
+margin-bottom:8px;
+}
+
+.meta{
+font-size:14px;
+opacity:.9;
+margin-bottom:10px;
+}
+
+.qty-box{
+display:flex;
+align-items:center;
+gap:10px;
+margin-top:8px;
+}
+
+.qty-btn{
+width:34px;
+height:34px;
+border:none;
+border-radius:50%;
+cursor:pointer;
+font-size:18px;
+font-weight:bold;
+background:white;
+color:#2575fc;
+}
+
+.qty{
+font-size:18px;
+font-weight:bold;
+min-width:22px;
+text-align:center;
+}
+
+.price{
+font-size:22px;
+font-weight:900;
+margin-top:8px;
+}
+
+.actions{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.remove{
+padding:10px 14px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+background:#ef4444;
+color:white;
+}
+
+.wishlist{
+padding:10px 14px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+background:white;
+color:#2575fc;
+}
+
+.summary h2{
+font-size:30px;
+margin-bottom:18px;
+}
+
+.bill{
+background:rgba(255,255,255,.10);
+padding:18px;
+border-radius:18px;
+}
+
+.line{
+display:flex;
+justify-content:space-between;
+margin:12px 0;
+font-size:15px;
+}
+
+.total{
+font-size:26px;
+font-weight:900;
+padding-top:14px;
+margin-top:14px;
+border-top:1px solid rgba(255,255,255,.28);
+}
+
+input{
+width:100%;
+padding:14px;
+margin-top:16px;
+border:none;
+outline:none;
+border-radius:14px;
+background:rgba(255,255,255,.20);
+color:white;
+}
+
+input::placeholder{
+color:#f1f1f1;
+}
+
+button.main{
+width:100%;
+padding:16px;
+border:none;
+border-radius:16px;
+font-size:17px;
+font-weight:900;
+cursor:pointer;
+background:white;
+color:#2575fc;
+margin-top:16px;
+transition:.3s;
+}
+
+button.main:hover{
+transform:translateY(-3px);
+}
+
+.note{
+margin-top:14px;
+font-size:13px;
+opacity:.9;
+text-align:center;
+}
+
+.empty{
+text-align:center;
+padding:60px 20px;
+font-size:24px;
+font-weight:900;
+}
+
+.small{
+font-size:14px;
+opacity:.9;
+margin-top:8px;
+}
+
+@media(max-width:980px){
+.wrapper{
+grid-template-columns:1fr;
+}
+}
+
+@media(max-width:650px){
+.item{
+grid-template-columns:1fr;
+text-align:center;
+}
+.cart-img{
+margin:auto;
+}
+.actions{
+flex-direction:row;
+justify-content:center;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="card">
+
+<div class="title">🛒 Your Luxury Cart</div>
+<div class="sub">Premium gifts selected for your special moments.</div>
+
+<div id="cartItems"></div>
+
+</div>
+
+<div class="card summary">
+
+<h2>Order Summary</h2>
+
+<div class="bill">
+
+<div class="line">
+<span>Items</span>
+<span id="itemsCount">0</span>
+</div>
+
+<div class="line">
+<span>Subtotal</span>
+<span>₹<span id="subtotal">0</span></span>
+</div>
+
+<div class="line">
+<span>Delivery</span>
+<span>₹<span id="delivery">49</span></span>
+</div>
+
+<div class="line">
+<span>Discount</span>
+<span>- ₹<span id="discount">0</span></span>
+</div>
+
+<div class="line total">
+<span>Total</span>
+<span>₹<span id="finalPrice">0</span></span>
+</div>
+
+</div>
+
+<input type="text" id="coupon" placeholder="Enter coupon code">
+
+<button class="main" onclick="applyCoupon()">Apply Coupon</button>
+
+<button class="main" onclick="goToPayment()">Proceed to Payment</button>
+
+<button class="main" onclick="clearCart()">Clear Cart</button>
+
+<div class="note">
+🎁 Use code <b>GIFT10</b> for extra discount
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let extraDiscount = 0;
+
+function loadCart(){
+
+const container = document.getElementById("cartItems");
+container.innerHTML = "";
+
+if(cart.length === 0){
+
+container.innerHTML = `
+<div class="empty">
+🛒 Cart is Empty
+<div class="small">Add premium gifts from homepage</div>
+</div>
+`;
+
+updateSummary();
+return;
+}
+
+cart.forEach((item,index)=>{
+
+if(!item.qty) item.qty = 1;
+
+container.innerHTML += `
+<div class="item">
+
+<img src="${item.image}" class="cart-img" onerror="this.src='https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=700&q=80'">
+
+<div class="details">
+
+<h3>${item.name}</h3>
+
+<div class="meta">Premium Quality • Fast Delivery</div>
+
+<div class="qty-box">
+<button class="qty-btn" onclick="changeQty(${index},-1)">-</button>
+<div class="qty">${item.qty}</div>
+<button class="qty-btn" onclick="changeQty(${index},1)">+</button>
+</div>
+
+<div class="price">₹${item.price * item.qty}</div>
+
+</div>
+
+<div class="actions">
+<button class="remove" onclick="removeItem(${index})">Remove</button>
+<button class="wishlist">Save</button>
+</div>
+
+</div>
+`;
+});
+
+localStorage.setItem("cart",JSON.stringify(cart));
+updateSummary();
+
+}
+
+function updateSummary(){
+
+let items = 0;
+let subtotal = 0;
+
+cart.forEach(item=>{
+items += item.qty || 1;
+subtotal += item.price * (item.qty || 1);
+});
+
+let delivery = subtotal > 999 ? 0 : 49;
+
+let discount = 0;
+
+if(subtotal > 5000){
+discount = Math.round(subtotal * 0.30);
+}else if(subtotal > 2500){
+discount = Math.round(subtotal * 0.15);
+}else if(subtotal > 1000){
+discount = Math.round(subtotal * 0.08);
+}
+
+discount += extraDiscount;
+
+let final = subtotal + delivery - discount;
+
+if(final < 0) final = 0;
+
+document.getElementById("itemsCount").innerText = items;
+document.getElementById("subtotal").innerText = subtotal;
+document.getElementById("delivery").innerText = delivery;
+document.getElementById("discount").innerText = discount;
+document.getElementById("finalPrice").innerText = final;
+
+localStorage.setItem("finalTotal",final);
+
+}
+
+function changeQty(index,val){
+
+cart[index].qty += val;
+
+if(cart[index].qty < 1){
+cart[index].qty = 1;
+}
+
+localStorage.setItem("cart",JSON.stringify(cart));
+loadCart();
+
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+localStorage.setItem("cart",JSON.stringify(cart));
+loadCart();
+
+}
+
+function clearCart(){
+
+cart = [];
+localStorage.setItem("cart","[]");
+loadCart();
+
+}
+
+function applyCoupon(){
+
+const code = document.getElementById("coupon").value.trim().toUpperCase();
+
+if(code === "GIFT10"){
+extraDiscount = 100;
+alert("Coupon Applied 🎉 ₹100 Off");
+}else if(code === "LUXURY20"){
+extraDiscount = 250;
+alert("Coupon Applied 🎉 ₹250 Off");
+}else{
+extraDiscount = 0;
+alert("Invalid Coupon");
+}
+
+updateSummary();
+
+}
+
+function goToPayment(){
+
+if(cart.length === 0){
+alert("Your cart is empty");
+return;
+}
+
+window.location = "payment.html";
+
+}
+
+loadCart();
+
+</script>
+
+</body>
+</html>

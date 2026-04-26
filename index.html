@@ -1,0 +1,978 @@
+<!-- ```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Premium Checkout</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:25px;
+background:linear-gradient(-45deg,#6a11cb,#2575fc,#ff0080,#00c6ff);
+background-size:400% 400%;
+animation:bgmove 12s ease infinite;
+}
+
+@keyframes bgmove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.checkout{
+width:100%;
+max-width:1100px;
+display:grid;
+grid-template-columns:1fr 420px;
+gap:25px;
+}
+
+.card{
+background:rgba(255,255,255,.18);
+backdrop-filter:blur(16px);
+border-radius:24px;
+padding:28px;
+box-shadow:0 18px 40px rgba(0,0,0,.18);
+color:white;
+}
+
+.title{
+font-size:34px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.sub{
+opacity:.9;
+margin-bottom:24px;
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.input-box{
+margin-bottom:14px;
+}
+
+label{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+font-weight:bold;
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:14px;
+background:rgba(255,255,255,.22);
+color:white;
+font-size:15px;
+}
+
+input::placeholder,
+textarea::placeholder{
+color:#f1f1f1;
+}
+
+textarea{
+resize:none;
+height:90px;
+}
+
+.methods{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.method{
+padding:14px;
+border-radius:16px;
+background:rgba(255,255,255,.16);
+text-align:center;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
+border:2px solid transparent;
+}
+
+.method:hover{
+transform:translateY(-3px);
+}
+
+.method.active{
+border-color:white;
+background:rgba(255,255,255,.28);
+}
+
+.summary h2{
+font-size:28px;
+margin-bottom:18px;
+}
+
+.bill{
+background:rgba(255,255,255,.12);
+padding:18px;
+border-radius:18px;
+margin-bottom:18px;
+}
+
+.line{
+display:flex;
+justify-content:space-between;
+margin:12px 0;
+}
+
+.total{
+font-size:24px;
+font-weight:900;
+padding-top:12px;
+margin-top:12px;
+border-top:1px solid rgba(255,255,255,.3);
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:16px;
+font-size:17px;
+font-weight:900;
+cursor:pointer;
+background:white;
+color:#2575fc;
+transition:.3s;
+margin-top:12px;
+}
+
+button:hover{
+transform:translateY(-3px);
+}
+
+#msg{
+margin-top:16px;
+font-weight:bold;
+text-align:center;
+min-height:22px;
+}
+
+.secure{
+margin-top:14px;
+font-size:13px;
+opacity:.9;
+}
+
+@media(max-width:900px){
+.checkout{
+grid-template-columns:1fr;
+}
+}
+
+@media(max-width:600px){
+.row{
+grid-template-columns:1fr;
+}
+.methods{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="checkout">
+
+<div class="card">
+
+<div class="title">💳 Premium Checkout</div>
+<div class="sub">Complete your order with secure payment.</div>
+
+<div class="row">
+
+<div class="input-box">
+<label>Full Name</label>
+<input type="text" id="name" placeholder="Enter full name">
+</div>
+
+<div class="input-box">
+<label>Phone</label>
+<input type="text" id="phone" placeholder="Enter phone number">
+</div>
+
+</div>
+
+<div class="input-box">
+<label>Email</label>
+<input type="email" id="email" placeholder="Enter email">
+</div>
+
+<div class="input-box">
+<label>Address</label>
+<textarea id="address" placeholder="Enter delivery address"></textarea>
+</div>
+
+<div class="input-box">
+<label>Select Payment Method</label>
+
+<div class="methods">
+<div class="method active" onclick="selectMethod(this,'UPI')">UPI</div>
+<div class="method" onclick="selectMethod(this,'Card')">Card</div>
+<div class="method" onclick="selectMethod(this,'COD')">COD</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card summary">
+
+<h2>Order Summary</h2>
+
+<div class="bill">
+
+<div class="line">
+<span>Items Total</span>
+<span>₹<span id="subtotal">0</span></span>
+</div>
+
+<div class="line">
+<span>Delivery</span>
+<span>₹<span id="delivery">49</span></span>
+</div>
+
+<div class="line">
+<span>Discount</span>
+<span>- ₹<span id="discount">100</span></span>
+</div>
+
+<div class="line total">
+<span>Total Payable</span>
+<span>₹<span id="amount">0</span></span>
+</div>
+
+</div>
+
+<button id="payBtn" onclick="pay()">Pay Now</button>
+
+<div id="msg"></div>
+
+<div class="secure">
+🔒 100% Secure Payment Gateway
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let paymentMethod = "UPI";
+
+function selectMethod(el,method){
+
+document.querySelectorAll(".method").forEach(box=>{
+box.classList.remove("active");
+});
+
+el.classList.add("active");
+
+paymentMethod = method;
+
+const btn = document.getElementById("payBtn");
+
+if(method === "COD"){
+btn.innerText = "Place Order";
+}else{
+btn.innerText = "Pay Now";
+}
+
+}
+
+function loadTotal(){
+
+const subtotal = Number(localStorage.getItem("finalTotal") || 0);
+
+document.getElementById("subtotal").innerText = subtotal;
+
+const delivery = subtotal > 999 ? 0 : 49;
+document.getElementById("delivery").innerText = delivery;
+
+const discount = subtotal > 2000 ? 250 : 100;
+document.getElementById("discount").innerText = discount;
+
+const finalAmount = subtotal + delivery - discount;
+
+document.getElementById("amount").innerText = finalAmount > 0 ? finalAmount : 0;
+
+}
+
+function pay(){
+
+const name = document.getElementById("name").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const email = document.getElementById("email").value.trim();
+const address = document.getElementById("address").value.trim();
+
+const msg = document.getElementById("msg");
+
+if(!name || !phone || !email || !address){
+msg.style.color="#ffd966";
+msg.innerText="Please fill all required fields";
+return;
+}
+
+msg.style.color="#7CFC00";
+
+if(paymentMethod === "COD"){
+msg.innerText="Placing Order...";
+}else{
+msg.innerText="Processing Payment...";
+}
+
+setTimeout(()=>{
+
+let icon = "✅";
+let title = "Order Successful";
+let text = "Your payment was completed successfully.<br>Thank you for shopping with us.";
+
+if(paymentMethod === "COD"){
+icon = "📦";
+title = "Order Confirmed";
+text = "Cash on Delivery selected.<br>Please pay when order arrives.";
+}
+
+document.body.insertAdjacentHTML("beforeend",`
+
+<div id="successPopup" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+backdrop-filter:blur(8px);
+">
+
+<div style="
+width:420px;
+max-width:90%;
+background:white;
+border-radius:26px;
+padding:35px;
+text-align:center;
+box-shadow:0 25px 60px rgba(0,0,0,.25);
+animation:pop .4s ease;
+">
+
+<div style="font-size:70px;">${icon}</div>
+
+<h2 style="
+color:#111827;
+font-size:30px;
+margin:10px 0;
+">${title}</h2>
+
+<p style="
+color:#64748b;
+line-height:1.7;
+margin-bottom:18px;
+">${text}</p>
+
+<div style="
+padding:14px;
+border-radius:14px;
+background:#f3f4f6;
+font-weight:900;
+color:#2575fc;
+margin-bottom:18px;
+">
+Payment Method: ${paymentMethod}
+</div>
+
+<button onclick="closePopup()" style="
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+font-size:17px;
+font-weight:900;
+cursor:pointer;
+background:linear-gradient(90deg,#6a11cb,#2575fc);
+color:white;
+">
+Continue Shopping
+</button>
+
+</div>
+
+</div>
+
+<style>
+@keyframes pop{
+from{transform:scale(.7);opacity:0;}
+to{transform:scale(1);opacity:1;}
+}
+</style>
+
+`);
+
+localStorage.removeItem("cart");
+localStorage.removeItem("finalTotal");
+
+msg.innerText="";
+
+},1800);
+
+}
+
+function closePopup(){
+
+document.getElementById("successPopup").remove();
+window.location="y.html";
+
+}
+
+loadTotal();
+
+</script>
+
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Gift Store Luxury</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:linear-gradient(135deg,#eef2ff,#ffffff,#f8faff);
+color:#111827;
+overflow-x:hidden;
+}
+
+header{
+position:sticky;
+top:0;
+z-index:1000;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 35px;
+background:rgba(255,255,255,.8);
+backdrop-filter:blur(14px);
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.logo{
+font-size:34px;
+font-weight:900;
+background:linear-gradient(90deg,#6a11cb,#2575fc,#ff0080);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.nav-right{
+display:flex;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+}
+
+button{
+border:none;
+cursor:pointer;
+padding:12px 18px;
+border-radius:14px;
+font-weight:bold;
+transition:.3s;
+}
+
+button:hover{
+transform:translateY(-3px);
+}
+
+.btn-white{
+background:white;
+color:#2575fc;
+}
+
+.btn-main{
+background:linear-gradient(90deg,#6a11cb,#2575fc);
+color:white;
+}
+
+.btn-danger{
+background:#ef4444;
+color:white;
+}
+
+.cart-pill{
+padding:12px 16px;
+border-radius:14px;
+background:white;
+font-weight:800;
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.hero{
+padding:70px 20px 30px;
+text-align:center;
+}
+
+.hero h1{
+font-size:58px;
+margin-bottom:15px;
+background:linear-gradient(90deg,#6a11cb,#2575fc,#ff0080);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hero p{
+font-size:18px;
+max-width:850px;
+margin:auto;
+line-height:1.7;
+color:#64748b;
+}
+
+.search-wrap{
+padding:20px;
+}
+
+#search{
+width:min(700px,95%);
+display:block;
+margin:auto;
+padding:16px;
+border:none;
+outline:none;
+border-radius:18px;
+box-shadow:0 12px 28px rgba(0,0,0,.08);
+font-size:16px;
+}
+
+.section-title{
+text-align:center;
+font-size:36px;
+font-weight:900;
+margin-top:10px;
+}
+
+#products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:24px;
+padding:30px;
+}
+
+.product{
+background:white;
+padding:16px;
+border-radius:24px;
+box-shadow:0 14px 28px rgba(0,0,0,.08);
+transition:.35s;
+position:relative;
+overflow:hidden;
+}
+
+.product:hover{
+transform:translateY(-8px);
+}
+
+.product-img{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:18px;
+}
+
+.badge{
+position:absolute;
+top:18px;
+left:18px;
+padding:8px 12px;
+border-radius:999px;
+font-size:12px;
+font-weight:bold;
+color:white;
+}
+
+.standard{background:#16a34a;}
+.premium{background:#f59e0b;}
+.luxury{background:#9333ea;}
+
+.product h3{
+font-size:22px;
+margin:14px 0 8px;
+}
+
+.meta{
+font-size:14px;
+color:#64748b;
+margin-bottom:8px;
+}
+
+select{
+width:100%;
+padding:10px;
+border-radius:12px;
+border:1px solid #ddd;
+margin:10px 0;
+}
+
+.price{
+font-size:28px;
+font-weight:900;
+color:#2575fc;
+margin:8px 0;
+}
+
+.add{
+width:100%;
+background:linear-gradient(90deg,#6a11cb,#2575fc);
+color:white;
+}
+
+footer{
+background:#111827;
+color:#cbd5e1;
+text-align:center;
+padding:30px;
+margin-top:20px;
+}
+
+.help-btn{
+position:fixed;
+right:22px;
+bottom:22px;
+z-index:999;
+padding:14px 18px;
+border-radius:50px;
+background:linear-gradient(90deg,#ff0080,#2575fc);
+color:white;
+font-weight:900;
+box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+
+#helpBox{
+position:fixed;
+right:22px;
+bottom:82px;
+width:320px;
+max-width:90%;
+background:white;
+border-radius:22px;
+box-shadow:0 20px 45px rgba(0,0,0,.18);
+padding:18px;
+display:none;
+z-index:999;
+}
+
+#helpBox h3{
+margin-bottom:10px;
+color:#111827;
+}
+
+.help-item{
+padding:12px;
+border-radius:14px;
+background:#f8fafc;
+margin-top:10px;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
+}
+
+.help-item:hover{
+background:#eef2ff;
+}
+
+#helpMsg{
+margin-top:12px;
+font-size:14px;
+color:#2575fc;
+font-weight:bold;
+line-height:1.6;
+}
+
+@media(max-width:768px){
+header{
+flex-direction:column;
+gap:12px;
+}
+.hero h1{
+font-size:40px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">🎁 GiftStore</div>
+
+<div class="nav-right">
+
+<span id="authButtons">
+<button class="btn-white" onclick="goLogin()">Login</button>
+<button class="btn-white" onclick="goRegister()">Register</button>
+</span>
+
+<span id="logoutBox" style="display:none;">
+<button class="btn-danger" onclick="logout()">Logout</button>
+</span>
+
+<div class="cart-pill">🛒 ₹<span id="total">0</span></div>
+
+<button class="btn-main" onclick="goToCart()">Checkout</button>
+
+</div>
+
+</header>
+
+<section class="hero">
+
+<h1>Luxury Gifts For Every Emotion ✨</h1>
+
+<p>
+Create unforgettable memories with premium personalized gifts, mugs, hampers, frames, lamps and elegant surprises.
+</p>
+
+</section>
+
+<div class="search-wrap">
+<input type="text" id="search" placeholder="Search gifts..." onkeyup="searchProducts()">
+</div>
+
+<div class="section-title">Trending Collections</div>
+
+<div id="products"></div>
+
+<footer>
+© 2026 GiftStore • Crafted With Love
+</footer>
+
+<button class="help-btn" onclick="toggleHelp()">💬 Help</button>
+
+
+<div id="helpBox">
+<h3>Need Help?</h3>
+
+<div class="help-item" onclick="window.location='help.html'">🆘 Help Center</div>
+
+<div class="help-item" onclick="helpText('Track your order from Orders page after login.')">📦 Track Order</div>
+
+<div class="help-item" onclick="helpText('Use Login button and enter your registered details.')">🔐 Login Support</div>
+
+<div class="help-item" onclick="helpText('Select product and click Add To Cart.')">🛒 Add To Cart</div>
+
+<div class="help-item" onclick="helpText('Contact support@giftstore.com for returns.')">↩ Return Help</div>
+
+<div class="help-item" onclick="window.location='contact.html'">📞 Contact Us</div>
+
+<div id="helpMsg"></div>
+</div>
+
+
+<script>
+
+const productsContainer = document.getElementById("products");
+
+const products = [
+{name:"Custom Mug",type:"Standard",basePrice:499,image:"https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=700&q=80"},
+{name:"Photo Frame",type:"Premium",basePrice:999,image:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=700&q=80"},
+{name:"Gift Hamper",type:"Luxury",basePrice:2499,image:"https://images.unsplash.com/photo-1607344645866-009c320b63e0?auto=format&fit=crop&w=700&q=80"},
+{name:"LED Lamp",type:"Premium",basePrice:1299,image:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80"},
+{name:"Chocolate Box",type:"Standard",basePrice:699,image:"https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=700&q=80"},
+{name:"Rose Box",type:"Luxury",basePrice:2999,image:"https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=700&q=80"},
+{name:"Cushion Gift",type:"Premium",basePrice:1199,image:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80"},
+{name:"Keychain",type:"Standard",basePrice:399,image:"https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=700&q=80"},
+{name:"Wall Clock",type:"Premium",basePrice:1499,image:"https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=700&q=80"},
+{name:"Photo Album",type:"Luxury",basePrice:1899,image:"https://images.unsplash.com/photo-1520637836862-4d197d17c55a?auto=format&fit=crop&w=700&q=80"},
+{name:"Teddy Bear",type:"Standard",basePrice:799,image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80"},
+{name:"Perfume Gift Set",type:"Luxury",basePrice:3499,image:"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=80"},
+{name:"Jewellery Box",type:"Premium",basePrice:1799,image:"https://images.unsplash.com/photo-1617038260897-41a1f14a8ca6?auto=format&fit=crop&w=700&q=80"},
+{name:"Greeting Card",type:"Standard",basePrice:299,image:"https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=700&q=80"},
+{name:"Couple Lamp",type:"Luxury",basePrice:2899,image:"https://images.unsplash.com/photo-1519710164239-da123dc03ef4?auto=format&fit=crop&w=700&q=80"},
+{name:"Wooden Name Plate",type:"Premium",basePrice:1599,image:"https://images.unsplash.com/photo-1517705008128-361805f42e86?auto=format&fit=crop&w=700&q=80"},
+{name:"Watch Gift Box",type:"Luxury",basePrice:4299,image:"https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=700&q=80"},
+{name:"Mini Plant Gift",type:"Standard",basePrice:599,image:"https://images.unsplash.com/photo-1463320726281-696a485928c7?auto=format&fit=crop&w=700&q=80"},
+{name:"Travel Bottle Set",type:"Premium",basePrice:1399,image:"https://images.unsplash.com/photo-1524594154908-eddba9e4a03b?auto=format&fit=crop&w=700&q=80"},
+{name:"Heart Pillow",type:"Standard",basePrice:749,image:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80"}
+];
+
+function loadProducts(){
+
+productsContainer.innerHTML="";
+
+products.forEach(p=>{
+
+const div=document.createElement("div");
+div.className="product";
+
+div.innerHTML=`
+<img src="${p.image}" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&w=700&q=80'">
+
+<div class="badge ${p.type.toLowerCase()}">${p.type}</div>
+
+<h3>${p.name}</h3>
+
+<div class="meta">Premium Quality • Bestseller • Fast Delivery</div>
+
+<select onchange="updatePrice(this,${p.basePrice},this.parentElement.querySelector('.price'))">
+<option value="1">Standard</option>
+<option value="1.4">Premium</option>
+<option value="1.8">Luxury</option>
+</select>
+
+<div class="price">₹${p.basePrice}</div>
+
+<button class="add" onclick="addToCart(this)">Add To Cart</button>
+`;
+
+productsContainer.appendChild(div);
+
+});
+
+}
+
+function updatePrice(select,base,priceBox){
+priceBox.innerText="₹"+Math.round(base*select.value);
+}
+
+function addToCart(btn){
+
+const card=btn.parentElement;
+
+const name=card.querySelector("h3").innerText;
+const price=Number(card.querySelector(".price").innerText.replace("₹",""));
+const image=card.querySelector("img").src;
+
+let cart=JSON.parse(localStorage.getItem("cart")) || [];
+
+cart.push({name,price,image});
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+updateTotal();
+
+alert(name+" added to cart ✨");
+
+}
+
+function updateTotal(){
+
+let cart=JSON.parse(localStorage.getItem("cart")) || [];
+
+const total=cart.reduce((sum,item)=>sum+item.price,0);
+
+document.getElementById("total").innerText=total;
+
+}
+
+function searchProducts(){
+
+const input=document.getElementById("search").value.toLowerCase();
+
+document.querySelectorAll(".product").forEach(item=>{
+
+const name=item.querySelector("h3").innerText.toLowerCase();
+
+item.style.display=name.includes(input) ? "block" : "none";
+
+});
+
+}
+
+function goLogin(){
+window.location="login.html";
+}
+
+function goRegister(){
+window.location="register.html";
+}
+
+function goToCart(){
+window.location="cart.html";
+}
+
+function logout(){
+localStorage.removeItem("token");
+location.reload();
+}
+
+function checkLogin(){
+
+const token=localStorage.getItem("token");
+
+if(token){
+document.getElementById("authButtons").style.display="none";
+document.getElementById("logoutBox").style.display="inline";
+}else{
+document.getElementById("authButtons").style.display="inline";
+document.getElementById("logoutBox").style.display="none";
+}
+
+}
+
+function toggleHelp(){
+
+const box=document.getElementById("helpBox");
+
+box.style.display = box.style.display==="block" ? "none" : "block";
+
+}
+
+function helpText(text){
+document.getElementById("helpMsg").innerText=text;
+}
+
+checkLogin();
+loadProducts();
+updateTotal();
+
+</script>
+
+</body>
+</html>

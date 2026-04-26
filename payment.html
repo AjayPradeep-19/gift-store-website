@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Premium Checkout</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:25px;
+background:linear-gradient(-45deg,#6a11cb,#2575fc,#ff0080,#00c6ff);
+background-size:400% 400%;
+animation:bgmove 12s ease infinite;
+}
+
+@keyframes bgmove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.checkout{
+width:100%;
+max-width:1100px;
+display:grid;
+grid-template-columns:1fr 420px;
+gap:25px;
+}
+
+.card{
+background:rgba(255,255,255,.18);
+backdrop-filter:blur(16px);
+border-radius:24px;
+padding:28px;
+box-shadow:0 18px 40px rgba(0,0,0,.18);
+color:white;
+}
+
+.title{
+font-size:34px;
+font-weight:900;
+margin-bottom:8px;
+}
+
+.sub{
+opacity:.9;
+margin-bottom:24px;
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.input-box{
+margin-bottom:14px;
+}
+
+label{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+font-weight:bold;
+}
+
+input,textarea{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:14px;
+background:rgba(255,255,255,.22);
+color:white;
+font-size:15px;
+}
+
+input::placeholder,
+textarea::placeholder{
+color:#f1f1f1;
+}
+
+textarea{
+resize:none;
+height:90px;
+}
+
+.methods{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-top:10px;
+}
+
+.method{
+padding:14px;
+border-radius:16px;
+background:rgba(255,255,255,.16);
+text-align:center;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
+border:2px solid transparent;
+}
+
+.method:hover{
+transform:translateY(-3px);
+}
+
+.method.active{
+border-color:white;
+background:rgba(255,255,255,.28);
+}
+
+.summary h2{
+font-size:28px;
+margin-bottom:18px;
+}
+
+.bill{
+background:rgba(255,255,255,.12);
+padding:18px;
+border-radius:18px;
+margin-bottom:18px;
+}
+
+.line{
+display:flex;
+justify-content:space-between;
+margin:12px 0;
+}
+
+.total{
+font-size:24px;
+font-weight:900;
+padding-top:12px;
+margin-top:12px;
+border-top:1px solid rgba(255,255,255,.3);
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:16px;
+font-size:17px;
+font-weight:900;
+cursor:pointer;
+background:white;
+color:#2575fc;
+transition:.3s;
+margin-top:12px;
+}
+
+button:hover{
+transform:translateY(-3px);
+}
+
+#msg{
+margin-top:16px;
+font-weight:bold;
+text-align:center;
+min-height:22px;
+}
+
+.secure{
+margin-top:14px;
+font-size:13px;
+opacity:.9;
+}
+
+@media(max-width:900px){
+.checkout{
+grid-template-columns:1fr;
+}
+}
+
+@media(max-width:600px){
+.row{
+grid-template-columns:1fr;
+}
+.methods{
+grid-template-columns:1fr;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="checkout">
+
+<div class="card">
+
+<div class="title">💳 Premium Checkout</div>
+<div class="sub">Complete your order with secure payment.</div>
+
+<div class="row">
+
+<div class="input-box">
+<label>Full Name</label>
+<input type="text" id="name" placeholder="Enter full name">
+</div>
+
+<div class="input-box">
+<label>Phone</label>
+<input type="text" id="phone" placeholder="Enter phone number">
+</div>
+
+</div>
+
+<div class="input-box">
+<label>Email</label>
+<input type="email" id="email" placeholder="Enter email">
+</div>
+
+<div class="input-box">
+<label>Address</label>
+<textarea id="address" placeholder="Enter delivery address"></textarea>
+</div>
+
+<div class="input-box">
+<label>Select Payment Method</label>
+
+<div class="methods">
+<div class="method active" onclick="selectMethod(this,'UPI')">UPI</div>
+<div class="method" onclick="selectMethod(this,'Card')">Card</div>
+<div class="method" onclick="selectMethod(this,'COD')">COD</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card summary">
+
+<h2>Order Summary</h2>
+
+<div class="bill">
+
+<div class="line">
+<span>Items Total</span>
+<span>₹<span id="subtotal">0</span></span>
+</div>
+
+<div class="line">
+<span>Delivery</span>
+<span>₹<span id="delivery">49</span></span>
+</div>
+
+<div class="line">
+<span>Discount</span>
+<span>- ₹<span id="discount">100</span></span>
+</div>
+
+<div class="line total">
+<span>Total Payable</span>
+<span>₹<span id="amount">0</span></span>
+</div>
+
+</div>
+
+<button id="payBtn" onclick="pay()">Pay Now</button>
+
+<div id="msg"></div>
+
+<div class="secure">
+🔒 100% Secure Payment Gateway
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let paymentMethod = "UPI";
+
+function selectMethod(el,method){
+
+document.querySelectorAll(".method").forEach(box=>{
+box.classList.remove("active");
+});
+
+el.classList.add("active");
+
+paymentMethod = method;
+
+const btn = document.getElementById("payBtn");
+
+if(method === "COD"){
+btn.innerText = "Place Order";
+}else{
+btn.innerText = "Pay Now";
+}
+
+}
+
+function loadTotal(){
+
+const subtotal = Number(localStorage.getItem("finalTotal") || 0);
+
+document.getElementById("subtotal").innerText = subtotal;
+
+const delivery = subtotal > 999 ? 0 : 49;
+document.getElementById("delivery").innerText = delivery;
+
+const discount = subtotal > 2000 ? 250 : 100;
+document.getElementById("discount").innerText = discount;
+
+const finalAmount = subtotal + delivery - discount;
+
+document.getElementById("amount").innerText = finalAmount > 0 ? finalAmount : 0;
+
+}
+
+function pay(){
+
+const name = document.getElementById("name").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const email = document.getElementById("email").value.trim();
+const address = document.getElementById("address").value.trim();
+
+const msg = document.getElementById("msg");
+
+if(!name || !phone || !email || !address){
+msg.style.color="#ffd966";
+msg.innerText="Please fill all required fields";
+return;
+}
+
+msg.style.color="#7CFC00";
+
+if(paymentMethod === "COD"){
+msg.innerText="Placing Order...";
+}else{
+msg.innerText="Processing Payment...";
+}
+
+setTimeout(()=>{
+
+let icon = "✅";
+let title = "Order Successful";
+let text = "Your payment was completed successfully.<br>Thank you for shopping with us.";
+
+if(paymentMethod === "COD"){
+icon = "📦";
+title = "Order Confirmed";
+text = "Cash on Delivery selected.<br>Please pay when order arrives.";
+}
+
+document.body.insertAdjacentHTML("beforeend",`
+
+<div id="successPopup" style="
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.65);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+backdrop-filter:blur(8px);
+">
+
+<div style="
+width:420px;
+max-width:90%;
+background:white;
+border-radius:26px;
+padding:35px;
+text-align:center;
+box-shadow:0 25px 60px rgba(0,0,0,.25);
+animation:pop .4s ease;
+">
+
+<div style="font-size:70px;">${icon}</div>
+
+<h2 style="
+color:#111827;
+font-size:30px;
+margin:10px 0;
+">${title}</h2>
+
+<p style="
+color:#64748b;
+line-height:1.7;
+margin-bottom:18px;
+">${text}</p>
+
+<div style="
+padding:14px;
+border-radius:14px;
+background:#f3f4f6;
+font-weight:900;
+color:#2575fc;
+margin-bottom:18px;
+">
+Payment Method: ${paymentMethod}
+</div>
+
+<button onclick="closePopup()" style="
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+font-size:17px;
+font-weight:900;
+cursor:pointer;
+background:linear-gradient(90deg,#6a11cb,#2575fc);
+color:white;
+">
+Continue Shopping
+</button>
+
+</div>
+
+</div>
+
+<style>
+@keyframes pop{
+from{transform:scale(.7);opacity:0;}
+to{transform:scale(1);opacity:1;}
+}
+</style>
+
+`);
+
+localStorage.removeItem("cart");
+localStorage.removeItem("finalTotal");
+
+msg.innerText="";
+
+},1800);
+
+}
+
+function closePopup(){
+
+document.getElementById("successPopup").remove();
+window.location="index.html";
+
+}
+
+loadTotal();
+
+</script>
+
+</body>
+</html>

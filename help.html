@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Contact Us | GiftStore</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+padding:30px;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow-x:hidden;
+background:
+radial-gradient(circle at top left,#ff4ecd,transparent 30%),
+radial-gradient(circle at bottom right,#00dbde,transparent 30%),
+linear-gradient(135deg,#090909,#111827,#1e1b4b,#312e81);
+position:relative;
+}
+
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+repeating-linear-gradient(
+45deg,
+rgba(255,255,255,.03) 0px,
+rgba(255,255,255,.03) 2px,
+transparent 2px,
+transparent 18px
+);
+animation:moveLines 16s linear infinite;
+pointer-events:none;
+}
+
+@keyframes moveLines{
+from{transform:translateX(0);}
+to{transform:translateX(120px);}
+}
+
+.wrapper{
+width:100%;
+max-width:1320px;
+display:grid;
+grid-template-columns:430px 1fr;
+gap:28px;
+position:relative;
+z-index:2;
+}
+
+.left{
+padding:36px;
+border-radius:32px;
+background:rgba(255,255,255,.10);
+backdrop-filter:blur(18px);
+box-shadow:0 25px 55px rgba(0,0,0,.28);
+color:white;
+border:1px solid rgba(255,255,255,.08);
+}
+
+.right{
+padding:38px;
+border-radius:32px;
+background:linear-gradient(145deg,#ffffff,#f8fafc);
+box-shadow:0 25px 55px rgba(0,0,0,.22);
+}
+
+.logo{
+font-size:36px;
+font-weight:900;
+margin-bottom:16px;
+}
+
+.tag{
+line-height:1.8;
+font-size:15px;
+opacity:.92;
+margin-bottom:26px;
+}
+
+.info-box{
+padding:18px;
+border-radius:20px;
+background:rgba(255,255,255,.08);
+margin-bottom:14px;
+transition:.3s;
+border:1px solid rgba(255,255,255,.06);
+}
+
+.info-box:hover{
+transform:translateY(-6px) scale(1.01);
+background:rgba(255,255,255,.14);
+}
+
+.info-box h3{
+font-size:17px;
+margin-bottom:6px;
+}
+
+.info-box p{
+font-size:14px;
+line-height:1.6;
+opacity:.95;
+}
+
+.social{
+display:flex;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap;
+}
+
+.social a{
+text-decoration:none;
+padding:12px 15px;
+border-radius:14px;
+background:rgba(255,255,255,.12);
+color:white;
+font-weight:bold;
+font-size:14px;
+transition:.3s;
+}
+
+.social a:hover{
+transform:translateY(-4px);
+background:rgba(255,255,255,.22);
+}
+
+.title{
+font-size:44px;
+font-weight:900;
+color:#111827;
+margin-bottom:10px;
+}
+
+.sub{
+color:#6b7280;
+line-height:1.8;
+margin-bottom:24px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.input-box{
+margin-bottom:14px;
+}
+
+label{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+font-weight:bold;
+color:#111827;
+}
+
+input,textarea{
+width:100%;
+padding:15px;
+border:1px solid #e5e7eb;
+border-radius:18px;
+outline:none;
+font-size:15px;
+transition:.3s;
+background:white;
+}
+
+input:focus,textarea:focus{
+border-color:#7c3aed;
+box-shadow:0 0 0 4px rgba(124,58,237,.12);
+}
+
+textarea{
+height:160px;
+resize:none;
+}
+
+button{
+width:100%;
+padding:16px;
+border:none;
+border-radius:18px;
+font-size:17px;
+font-weight:900;
+cursor:pointer;
+transition:.3s;
+margin-top:10px;
+}
+
+.send{
+background:linear-gradient(90deg,#ff0080,#7c3aed,#2575fc);
+color:white;
+}
+
+.home{
+background:#111827;
+color:white;
+}
+
+button:hover{
+transform:translateY(-4px);
+}
+
+#msg{
+margin-top:14px;
+font-weight:bold;
+min-height:22px;
+text-align:center;
+color:#16a34a;
+}
+
+@media(max-width:980px){
+.wrapper{
+grid-template-columns:1fr;
+}
+}
+
+@media(max-width:600px){
+body{
+padding:15px;
+}
+.grid{
+grid-template-columns:1fr;
+}
+.left,.right{
+padding:24px;
+}
+.title{
+font-size:36px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="left">
+
+<div class="logo">🎁 GiftStore</div>
+
+<div class="tag">
+Modern luxury customer support with instant assistance for orders, gifting help, returns and premium services.
+</div>
+
+<div class="info-box">
+<h3>📍 Address</h3>
+<p>Premium Street, Hyderabad, India</p>
+</div>
+
+<div class="info-box">
+<h3>📧 Email</h3>
+<p>support@giftstore.com</p>
+</div>
+
+<div class="info-box">
+<h3>📱 Phone</h3>
+<p>+91 98765 43210</p>
+</div>
+
+<div class="info-box">
+<h3>🕒 Working Hours</h3>
+<p>Mon - Sun : 9AM to 10PM</p>
+</div>
+
+<div class="social">
+<a href="#">Instagram</a>
+<a href="#">Facebook</a>
+<a href="#">WhatsApp</a>
+<a href="#">YouTube</a>
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="title">Let's Talk</div>
+
+<div class="sub">
+Have a question or need support? Send a message and our team will respond quickly.
+</div>
+
+<div class="grid">
+
+<div class="input-box">
+<label>Full Name</label>
+<input type="text" id="name" placeholder="Enter full name">
+</div>
+
+<div class="input-box">
+<label>Email</label>
+<input type="email" id="email" placeholder="Enter email">
+</div>
+
+</div>
+
+<div class="input-box">
+<label>Subject</label>
+<input type="text" id="subject" placeholder="Enter subject">
+</div>
+
+<div class="input-box">
+<label>Message</label>
+<textarea id="message" placeholder="Write your message"></textarea>
+</div>
+
+<button class="send" onclick="sendMessage()">Send Message</button>
+
+<button class="home" onclick="goHome()">Back to Home</button>
+
+<div id="msg"></div>
+
+</div>
+
+</div>
+
+<script>
+function sendMessage(){
+
+const name=document.getElementById("name").value.trim();
+const email=document.getElementById("email").value.trim();
+const subject=document.getElementById("subject").value.trim();
+const message=document.getElementById("message").value.trim();
+
+const msg=document.getElementById("msg");
+
+if(!name || !email || !subject || !message){
+msg.style.color="#dc2626";
+msg.innerText="Please fill all fields";
+return;
+}
+
+msg.style.color="#16a34a";
+msg.innerText="Message Sent Successfully 🎉";
+
+document.getElementById("name").value="";
+document.getElementById("email").value="";
+document.getElementById("subject").value="";
+document.getElementById("message").value="";
+}
+
+function goHome(){
+window.location="index.html";
+}
+</script>
+
+</body>
+</html>
